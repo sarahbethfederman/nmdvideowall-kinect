@@ -96,7 +96,7 @@ const development = {
   node: {
     net: 'empty',
     tls: 'empty',
-    dns : 'empty'
+    dns: 'empty'
   },
   ...resolve,
   module: {
@@ -136,6 +136,11 @@ const production = {
   entry: [
     './src/main.js'
   ],
+  node: {
+    net: 'empty',
+    tls: 'empty',
+    dns: 'empty'
+  },
   ...resolve,
   module: {
     ...lintLoaders,

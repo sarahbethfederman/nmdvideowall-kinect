@@ -59,6 +59,8 @@ class IndexPage extends Component {
       <InlineCss stylesheet={ this.loadingCss() } namespace="Home-Loading">
         <div>
           loading
+          <br /><br />
+          { this.generateErrorMessage() }
         </div>
       </InlineCss>
     );
