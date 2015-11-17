@@ -4,6 +4,7 @@ import fetch from 'fetch';
 import { connect } from 'react-redux';
 import { pushState } from 'redux-router';
 import store from '../lib/store';
+import InlineCss from 'react-inline-css';
 
 class IndexPage extends Component {
 
@@ -52,23 +53,48 @@ class IndexPage extends Component {
     return message;
   }
 
+
   renderLoadingScreen() {
     return (
-      <div>
-        loading
-      </div>
+      <InlineCss stylesheet={ this.loadingCss() } namespace="Home-Loading">
+        <div>
+          loading
+        </div>
+      </InlineCss>
     );
   }
 
+  loadingCss() {
+    return (`
+      & div {
+        font-size: 23px;
+        color: red;
+      }
+    `);
+  }
+
+
   renderDisplay() {
     return (
-      <div>
-        this is the real page
+      <InlineCss stylesheet={ this.css() } namespace="Home">
+        <div>
+          this is the real page
 
-        <br /><br />
-        { this.generateErrorMessage() }
-      </div>
+          <br /><br />
+          { this.generateErrorMessage() }
+        </div>
+      </InlineCss>
     );
+  }
+
+  css() {
+    return (`
+      & div {
+        font-size: 14px;
+        color: #333;
+        text-decoration: underline;
+      }
+    `);
   }
 
 

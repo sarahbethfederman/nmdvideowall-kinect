@@ -7,7 +7,7 @@
 </head>
 <body>
   <div id="content">
-    <h1>Loading...</h1>
+    <noscript>Please enable Javascript to use this site.</noscript>
   </div>
 
   <script>
