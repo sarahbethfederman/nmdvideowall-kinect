@@ -1,19 +1,14 @@
-import { List, Map } from 'immutable';
 import * as ActionTypes from '../constants/ActionTypes.js';
 
-const initialState = List([Map({text: 'my first todo', completed: false}), Map({text: 'my second todo', completed: false})]);
+const initialState = [
+  { id: 1, title: `Title 1`, description: `This is the description`, format: `video`, location: `http://placekitten.com/g/150/150`, createdDate: Date.now },
+  { id: 2, title: `Title 2`, description: `This is the description`, format: `video`, location: `http://placekitten.com/g/250/250`, createdDate: Date.now },
+  { id: 3, title: `Title 3`, description: `This is the description`, format: `image`, location: `http://placekitten.com/g/200/200`, createdDate: Date.now }];
 
 export function entries(state = initialState, action = null) {
-  const { type, payload } = action;
+  const { type } = action;
+
   switch (type) {
-  case ActionTypes.ADD_TODO:
-    return state.push(Map(payload));
-  case ActionTypes.DELETE_TODO:
-    return state.delete(payload.index);
-  case ActionTypes.CLEAR_TODO:
-    return state.filter((todo) => !todo.get('completed'));
-  case ActionTypes.TOGGLE_CHECKED:
-    return state.update(payload.index, todo => todo.set('completed', !todo.get('completed')));
   default:
     return state;
   }

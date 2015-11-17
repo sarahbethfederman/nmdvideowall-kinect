@@ -1,8 +1,8 @@
-import { SET_FILTER } from '../constants/ActionTypes';
+import * as Actions from '../constants/ActionTypes';
 
 export function setFilter(filter) {
   return {
-    type: SET_FILTER,
+    type: Actions.SET_FILTER,
     payload: filter
   };
 }
