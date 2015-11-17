@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>NMD Wall thing idk</title>
+</head>
+<body>
+  <div id="content">
+    <h1>Loading...</h1>
+  </div>
+
+  <script>
+    __REACT_DEVTOOLS_GLOBAL_HOOK__ = parent.__REACT_DEVTOOLS_GLOBAL_HOOK__
+  </script>
+</body>
+</html>
