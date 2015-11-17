@@ -1,6 +1,4 @@
 import webpack from 'webpack';
-import cssnext from 'cssnext';
-import precss from 'precss';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const assetPath = require('path').join(__dirname, 'dist');
@@ -34,15 +32,9 @@ const jsLoaders = {
   loader: 'babel'
 };
 
-const loaders = [{ test: /\.json$/, loader: 'json-loader' },
-{
-  test: /\.scss/,
-  exclude: [/node_module/],
-  loader: 'style!css?module&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss'
-}, {
-  test: /\.css/,
-  exclude: [/node_module/],
-  loader: 'style!css'
+const loaders = [{
+  test: /\.json$/,
+  loader: 'json-loader'
 }, {
   test: /\.(png|jpg|woff|woff2)$/,
   loader: 'url?limit=8192'
@@ -131,16 +123,7 @@ const development = {
     ]
   },
 
-  plugins: plugins.development,
-
-  postcss: function() {
-    return [
-      cssnext({
-        autoprefixer: ['last 2 version']
-      }),
-      precss
-    ]
-  }
+  plugins: plugins.development
 };
 
 const production = {
@@ -163,16 +146,7 @@ const production = {
     ]
   },
 
-  plugins: plugins.production,
-
-  postcss: function() {
-    return [
-      cssnext({
-        autoprefixer: ['last 2 version']
-      }),
-      precss
-    ]
-  }
+  plugins: plugins.production
 };
 
 
