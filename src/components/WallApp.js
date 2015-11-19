@@ -6,6 +6,9 @@ import { pushState } from 'redux-router';
 // import store from '../lib/store';
 import InlineCss from 'react-inline-css';
 
+import PrimaryNavigation from './PrimaryNavigation';
+import MainPlayer from './MainPlayer';
+
 import * as entriesActionCreators from '../actions/EntriesAction.js';
 
 @connect((state) => {
@@ -88,30 +91,8 @@ class WallApp extends Component {
         <div>
           this is the real page
 
-
-          <div className="main-player">
-            <div className="progress-bar" data-progress="25"></div>
-            <div className="video-player">{ this.props.router.params.entryID }</div>
-          </div>
-
-          <div className="video-controls">
-            <button>play</button>
-            <button>mute</button>
-            <input type="range" min="0" max="100" step="1" />
-          </div>
-
-          <div className="primary-navigation">
-            <ul key={ entries.size }>
-              {
-                entries.map((entry, idx)=>{
-                  return (
-                    <li key={ idx } title={ entry.location }>{ entry.title }</li>
-                  );
-                })
-              }
-            </ul>
-          </div>
-
+          <MainPlayer entries={ entries } entry={ entries[ this.props.router.params.entryID || 0 ] } />
+          <PrimaryNavigation entries={ entries } />
 
           <br /><br />
           { this.generateErrorMessage() }

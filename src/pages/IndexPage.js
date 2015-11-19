@@ -9,7 +9,6 @@ import * as entriesActionCreators from '../actions/EntriesAction.js';
 @connect((state) => {
   return {
     entries: state.entries,
-    filter: state.filter,
     router: state.router
   };
 }, entriesActionCreators)
