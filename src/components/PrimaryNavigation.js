@@ -51,9 +51,8 @@ class PrimaryNavigation extends Component {
         position: fixed;
         top: 50%;
         transform: translateY(-50%);
-        left: 0;
-        width: 100%;
-        right: 0;
+        left: 5%;
+        right: 5%;
         z-index: 50;
       }
 
