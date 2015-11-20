@@ -9,5 +9,5 @@ export default (
 	<Route>
 		<Route path="/:entryID" component={ Pages.IndexPage } />
 		<Route path="/" component={ Pages.IndexPage } />
-    </Route>
+  </Route>
 );
