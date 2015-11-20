@@ -13,16 +13,12 @@ export default class MainPlayer extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('hi', nextProps);
-  }
-
   render() {
     const { entry } = this.props;
 
     return (
       <InlineCss stylesheet={ this.css() } namespace="MainPlayer">
-        <Entry ref="entry" { ...entry } />
+        <Entry key={ entry.id } ref="entry" { ...entry } />
       </InlineCss>
     );
   }

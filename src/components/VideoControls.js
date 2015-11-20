@@ -8,7 +8,7 @@ export default class VideoControls extends Component {
     super(props);
 
     this.state = {
-      playing: false,
+      playing: true,
       muted: false,
       volume: 1
     };

@@ -4,13 +4,12 @@ import InlineCss from 'react-inline-css';
 import VideoComponent from './VideoComponent';
 import ImageComponent from './ImageComponent';
 
-export default class EntryDisplay extends Component {
+export default class Entry extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      elapsed: 50,
-      duration: 100
+      isLoading: true
     };
   }
 
@@ -21,16 +20,13 @@ export default class EntryDisplay extends Component {
   }
 
   renderVideo() {
-    const { elapsed, duration } = this.state;
     const sources = [this.props.location];
     const { poster } = this.props;
 
     return (
-      <InlineCss stylesheet={ this.css() } namespace="EntryDisplay">
+      <InlineCss stylesheet={ this.css() } namespace="Entry">
         <div className="entry-display">
-          <div className="progress-bar" data-progress={ Math.round((elapsed / duration) * 100) }></div>
-          this is a video
-          <VideoComponent poster={ poster || '' } sources={ sources } />
+          <VideoComponent key={ sources[0] } poster={ poster || '' } sources={ sources } onLoad={ ::this.onEntryLoad } />
         </div>
 
         <br /><br />
@@ -43,9 +39,9 @@ export default class EntryDisplay extends Component {
     const { location } = this.props;
 
     return (
-      <InlineCss stylesheet={ this.css() } namespace="EntryDisplay">
+      <InlineCss stylesheet={ this.css() } namespace="Entry">
         <div className="entry-display">
-          <ImageComponent source={ location } />
+          <ImageComponent source={ location } onLoad={ ::this.onEntryLoad } />
         </div>
 
         <br /><br />
@@ -58,6 +54,14 @@ export default class EntryDisplay extends Component {
     return (`
       & .entry-display {
 
+      }
+
+      & .entry-loading {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        font-size: 32px;
       }
     `);
   }
@@ -73,9 +77,15 @@ export default class EntryDisplay extends Component {
 
     return message;
   }
+
+  onEntryLoad() {
+    this.setState({
+      isLoading: false
+    });
+  }
 }
 
 
-EntryDisplay.defaultProps = {
+Entry.defaultProps = {
   format: 'image'
 };

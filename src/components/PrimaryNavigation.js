@@ -21,7 +21,7 @@ class PrimaryNavigation extends Component {
   }
 
   render() {
-    const { entries } = this.props;
+    const { entries, selected } = this.props;
 
     return (
       <InlineCss stylesheet={ this.css() } namespace="PrimaryNavigation">
@@ -30,13 +30,14 @@ class PrimaryNavigation extends Component {
             {
               entries.map((entry, idx)=>{
                 return (
-                  <li className="nav-item" key={ idx } title={ entry.location }><Link to={ `/${ idx }` }>{ entry.title }</Link></li>
+                  <li className="nav-item" key={ idx } title={ entry.location }>
+                  { selected !== idx ? (<Link to={ `/${ idx + 1 }` }>{ entry.title }</Link>) : (<span>{ entry.title }</span>) }
+                  </li>
                 );
               })
             }
           </ul>
         </div>
-
 
         <br /><br />
         { this.generateErrorMessage() }
@@ -52,7 +53,6 @@ class PrimaryNavigation extends Component {
         transform: translateY(-50%);
         left: 0;
         width: 100%;
-        height: 10vh;
         right: 0;
         z-index: 50;
       }
@@ -60,7 +60,7 @@ class PrimaryNavigation extends Component {
       & > .primary-navigation > ul .nav-item {
         display: inline-block;
         width: ${ 100 / (this.props.entries.size || this.props.entries.length || 1) }%;
-        height: 100%;
+        height: 10vh;
         box-shadow: inset 0px 0px 2px;
       }
     `);

@@ -16,8 +16,7 @@ export default class ImageComponent extends Component {
     return (
       <InlineCss stylesheet={ this.css() } namespace="ImageComponent">
         <img
-          onLoad={ ::this.props.onLoad }
-          onComplete={ ::this.props.onComplete }
+          onload={ ::this.onLoad }
           src={ source }
         />
       </InlineCss>
@@ -31,14 +30,29 @@ export default class ImageComponent extends Component {
         top: 0;
         left: 0;
         height: 100%;
+        overflow: hidden;
         width: 100%;
         z-index: 50;
       }
+
+      & > img {
+        left: 50%;
+        min-height: 100%;
+        min-width: 100%;
+        position: absolute;
+        top: 50%;
+        transform: translateX(-50%) translateY(-50%);
+      }
     `);
   }
-}
 
-ImageComponent.defaultProps = {
-  onLoad: ()=>{},
-  onComplete: ()=>{}
-};
+  onLoad() {
+    this.setState({
+      isLoading: false
+    });
+
+    if (this.props.hasOwnProperty('onLoad')) {
+      this.props.onLoad();
+    }
+  }
+}

@@ -7,6 +7,7 @@ import { pushState } from 'redux-router';
 import InlineCss from 'react-inline-css';
 
 import PrimaryNavigation from './PrimaryNavigation';
+import PlayerControls from './PlayerControls';
 import MainPlayer from './MainPlayer';
 
 import * as entriesActionCreators from '../actions/EntriesAction.js';
@@ -21,14 +22,14 @@ class WallApp extends Component {
     super(props);
 
     this.state = {
-      isLoading: true
+      isLoading: false
     };
 
-    setTimeout(()=>{
-      this.setState({
-        isLoading: false
-      });
-    }, 1000);
+    // setTimeout(()=>{
+    //   this.setState({
+    //     isLoading: false
+    //   });
+    // }, 1000);
 
     // this.getInitialData();
   }
@@ -66,7 +67,7 @@ class WallApp extends Component {
     return (
       <InlineCss stylesheet={ this.loadingCss() } namespace="WallApp-Loading">
         <div>
-          loading
+          this is the loading screen for the app. this could be an intro video or something idk
           <br /><br />
           { this.generateErrorMessage() }
         </div>
@@ -85,20 +86,30 @@ class WallApp extends Component {
 
   renderDisplay() {
     const { entries } = this.props;
+    const entryID = this.props.router.params.entryID || 1;
 
     return (
       <InlineCss stylesheet={ this.css() } namespace="WallApp">
         <div>
-          this is the real page
-
-          <MainPlayer entries={ entries } entry={ entries[ this.props.router.params.entryID || 0 ] } />
-          <PrimaryNavigation entries={ entries } />
+          <MainPlayer entries={ entries } entry={ entries[entryID - 1] } />
+          <PrimaryNavigation entries={ entries } selected={ entryID - 1 } />
+          <PlayerControls
+            current={ entryID }
+            max={ entries.length || entries.size || 0 }
+            onPrevious={ ::this.navigateTo }
+            onNext={ ::this.navigateTo }
+            loops
+          />
 
           <br /><br />
           { this.generateErrorMessage() }
         </div>
       </InlineCss>
     );
+  }
+
+  navigateTo(index) {
+    this.props.pushState(null, `/${ index }`);
   }
 
   css() {
