@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router';
 import InlineCss from 'react-inline-css';
-import VideoControls from './VideoControls';
 import VideoComponent from './VideoComponent';
 import ImageComponent from './ImageComponent';
 
@@ -32,7 +31,6 @@ export default class EntryDisplay extends Component {
           <div className="progress-bar" data-progress={ Math.round((elapsed / duration) * 100) }></div>
           this is a video
           <VideoComponent poster={ poster || '' } sources={ sources } />
-          <VideoControls />
         </div>
 
         <br /><br />

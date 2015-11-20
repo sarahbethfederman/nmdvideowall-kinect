@@ -46,7 +46,7 @@ class PrimaryNavigation extends Component {
 
   css() {
     return (`
-      & .primary-navigation {
+      & > .primary-navigation {
         position: fixed;
         top: 50%;
         transform: translateY(-50%);
@@ -57,7 +57,7 @@ class PrimaryNavigation extends Component {
         z-index: 50;
       }
 
-      & .nav-item {
+      & > .primary-navigation > ul .nav-item {
         display: inline-block;
         width: ${ 100 / (this.props.entries.size || this.props.entries.length || 1) }%;
         height: 100%;

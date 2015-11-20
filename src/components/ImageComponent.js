@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import InlineCss from 'react-inline-css';
 
 
-export default class VideoComponent extends Component {
+export default class ImageComponent extends Component {
   constructor(props) {
     super(props);
 
@@ -14,7 +14,7 @@ export default class VideoComponent extends Component {
     const { source } = this.props;
 
     return (
-      <InlineCss stylesheet={ this.css() } namespace="VideoComponent">
+      <InlineCss stylesheet={ this.css() } namespace="ImageComponent">
         <img
           onLoad={ ::this.props.onLoad }
           onComplete={ ::this.props.onComplete }
@@ -38,7 +38,7 @@ export default class VideoComponent extends Component {
   }
 }
 
-VideoComponent.defaultProps = {
+ImageComponent.defaultProps = {
   onLoad: ()=>{},
   onComplete: ()=>{}
 };

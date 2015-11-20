@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router';
 import InlineCss from 'react-inline-css';
+import VideoControls from './VideoControls';
 
 
 export default class VideoComponent extends Component {
@@ -16,10 +17,10 @@ export default class VideoComponent extends Component {
     return (
       <InlineCss stylesheet={ this.css() } namespace="VideoComponent">
         <video
+          ref="video"
           onLoad={ ::this.props.onLoad }
           onComplete={ ::this.props.onComplete }
           preload="auto"
-          autoPlay="auto"
           poster={ poster }>
           {
             sources.map((source)=>{
@@ -29,6 +30,12 @@ export default class VideoComponent extends Component {
             })
           }
         </video>
+
+        <VideoControls
+          onVolumeChange={ ::this.onVolumeChange }
+          onPlayToggle={ ::this.onPlayToggle }
+          onMuteToggle={ ::this.onMuteToggle }
+        />
       </InlineCss>
     );
   }
@@ -45,6 +52,20 @@ export default class VideoComponent extends Component {
       }
     `);
   }
+
+
+  onVolumeChange(volume) {
+    this.refs.video.volume = volume || 0;
+  }
+
+  onPlayToggle(yesno) {
+    this.refs.video[yesno ? `play` : `pause`]();
+  }
+
+  onMuteToggle(yesno) {
+    this.refs.video.muted = yesno;
+  }
+
 }
 
 VideoComponent.defaultProps = {
