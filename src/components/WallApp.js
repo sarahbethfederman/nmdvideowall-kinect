@@ -114,10 +114,13 @@ class WallApp extends Component {
 
   css() {
     return (`
-      & div {
-        font-size: 14px;
-        color: #333;
-        text-decoration: underline;
+      html, body {
+        background: #000;
+        height: 100vh;
+        width: 100vh;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
       }
     `);
   }

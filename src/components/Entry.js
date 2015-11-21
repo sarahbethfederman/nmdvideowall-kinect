@@ -21,12 +21,12 @@ export default class Entry extends Component {
 
   renderVideo() {
     const sources = [this.props.location];
-    const { poster } = this.props;
+    const { poster, tracks } = this.props;
 
     return (
       <InlineCss stylesheet={ this.css() } namespace="Entry">
         <div className="entry-display">
-          <VideoComponent key={ sources[0] } poster={ poster || '' } sources={ sources } onLoad={ ::this.onEntryLoad } />
+          <VideoComponent key={ sources[0] } poster={ poster || '' } sources={ sources } tracks={ tracks } onLoad={ ::this.onEntryLoad } />
         </div>
 
         <br /><br />

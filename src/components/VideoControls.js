@@ -10,12 +10,14 @@ export default class VideoControls extends Component {
     this.state = {
       playing: true,
       muted: false,
+      ccEnabled: false,
       volume: 1
     };
   }
 
   render() {
     const { playing, muted } = this.state;
+    const { hasCC } = this.props;
 
     return (
       <InlineCss stylesheet={ this.css() } namespace="VideoControls">
@@ -23,6 +25,13 @@ export default class VideoControls extends Component {
           <button onClick={ ::this.onPlayToggle }>{ playing ? `Pause` : `Play` }</button>
           <button onClick={ ::this.onMuteToggle }>{ muted ? `Unmute` : `Mute` }</button>
           <input ref="volume" onChange={ ::this.onVolumeChange } type="range" min="0" max="1" step="0.1" defaultValue="1" />
+          {
+            ()=>{
+              if (hasCC) {
+                return this.renderCaptionControls();
+              }
+            }
+          }
         </div>
 
         <br /><br />
@@ -40,6 +49,14 @@ export default class VideoControls extends Component {
         z-index: 50;
       }
     `);
+  }
+
+  renderCaptionControls() {
+    const { ccEnabled } = this.state;
+
+    return (
+      <button onClick={ ::this.onCCToggle }>{ ccEnabled ? `Disable CC` : `Enable CC` }</button>
+    );
   }
 
   generateErrorMessage() {
@@ -67,26 +84,38 @@ export default class VideoControls extends Component {
     });
   }
   onPlayToggle() {
-    const newSetting = !this.state.playing;
+    const playing = !this.state.playing;
 
     if (this.props.onPlayToggle) {
-      this.props.onPlayToggle(newSetting);
+      this.props.onPlayToggle(playing);
     }
 
     this.setState({
-      playing: newSetting
+      playing
     });
   }
 
   onMuteToggle() {
-    const newSetting = !this.state.muted;
+    const muted = !this.state.muted;
 
     if (this.props.onMuteToggle) {
-      this.props.onMuteToggle(newSetting);
+      this.props.onMuteToggle(muted);
     }
 
     this.setState({
-      muted: newSetting
+      muted
+    });
+  }
+
+  onCCToggle() {
+    const ccEnabled = !this.state.ccEnabled;
+
+    if (this.props.onCCToggle) {
+      this.props.onCCToggle(ccEnabled);
+    }
+
+    this.setState({
+      ccEnabled
     });
   }
 }

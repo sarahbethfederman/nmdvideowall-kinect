@@ -24,12 +24,14 @@ export default class VideoComponent extends Component {
   }
 
   render() {
-    const { poster, sources } = this.props;
+    const { poster, sources, tracks } = this.props;
     const { elapsed, duration } = this.state;
 
     return (
       <InlineCss stylesheet={ this.css() } namespace="VideoComponent">
-        <div className="progress-bar" data-progress={ Math.round((elapsed / duration) * 100) }></div>
+        <div className="progress-bar">
+          <div className="bar" style={{ width: `${(elapsed / duration) * 100}%` }}></div>
+        </div>
 
         <video
           ref="video"
@@ -45,12 +47,27 @@ export default class VideoComponent extends Component {
               );
             })
           }
+          {
+            tracks.map((track, index)=>{
+              // kind = `subtitles`
+              // label = `English`
+              // srclang = `en`
+              // src = `url/to/file.vtt`
+              // defaults to first in list
+              return React.createElement(
+                <track key={ index } kind={ track.kind } label={ track.label } srcLang={ track.srclang } src={ track.source } default={ index === 0 } />,
+                { ref: `track-${index}` }
+              );
+            })
+          }
         </video>
 
         <VideoControls
           onVolumeChange={ ::this.onVolumeChange }
           onPlayToggle={ ::this.onPlayToggle }
           onMuteToggle={ ::this.onMuteToggle }
+          onCCToggle={ ::this.onCCToggle }
+          hasCC={ (tracks.length || tracks.size || 0) > 0 }
         />
       </InlineCss>
     );
@@ -77,6 +94,31 @@ export default class VideoComponent extends Component {
         top: 50%;
         transform: translateX(-50%) translateY(-50%);
       }
+
+      & > .progress-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 1.1vh;
+        background: #595959;
+        display: block;
+        z-index: 40;
+        min-height: 10px;
+      }
+
+      & > .progress-bar .bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        height:auto;
+        width: 0%;
+        background: #B2B2B2;
+        display: block;
+        z-index: 5;
+      }
     `);
   }
 
@@ -90,8 +132,6 @@ export default class VideoComponent extends Component {
 
   removeVideoListeners() {
     const vid = this.refs.video;
-
-    console.log('here');
 
     vid.removeEventListener('timeupdate');
     vid.removeEventListener('load');
@@ -155,4 +195,18 @@ export default class VideoComponent extends Component {
   onMuteToggle(yesno) {
     this.refs.video.muted = yesno;
   }
+
+  onCCToggle(yesno) {
+    const { tracks } = this.props;
+
+    (tracks || []).map((track, index)=>{
+      this.refs[`track-${index}`].mode = yesno ? 'showing' : 'hidden';
+    });
+  }
 }
+
+VideoComponent.defaultProps = {
+  poster: ``,
+  sources: [],
+  tracks: []
+};
