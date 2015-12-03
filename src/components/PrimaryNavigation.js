@@ -10,6 +10,7 @@ import * as entriesActionCreators from '../actions/EntriesAction.js';
 
 @connect((state) => {
   return {
+    active: state.active,
     router: state.router
   };
 }, entriesActionCreators)
@@ -25,7 +26,7 @@ class PrimaryNavigation extends Component {
 
     return (
       <InlineCss stylesheet={ this.css() } namespace="PrimaryNavigation">
-        <div className="primary-navigation">
+        <div className="primary-navigation" style={{display: this.props.active ? `block` : `none`}}>
           <ul key={ entries.size }>
             {
               entries.map((entry, idx)=>{

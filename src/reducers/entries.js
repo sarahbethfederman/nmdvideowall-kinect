@@ -11,6 +11,7 @@ export function entries(state = initialState, action = null) {
 
   switch (type) {
   default:
-    return state;
+    break;
   }
+  return state;
 }

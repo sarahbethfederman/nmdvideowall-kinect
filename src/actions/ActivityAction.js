@@ -18,7 +18,7 @@ export function setActive(yesno) {
   };
 }
 
-export function wasActive() {
+export function confirmUserWasActive() {
   return {
     // 'type' is what tells the reducer which way to affect the state
     type: Actions.ACTIVITY,
@@ -30,7 +30,7 @@ export function wasActive() {
   };
 }
 
-export function wasIdle() {
+export function confirmUserWasIdle() {
   return {
     // 'type' is what tells the reducer which way to affect the state
     type: Actions.IDLE,
