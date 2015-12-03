@@ -48,18 +48,6 @@ class WallApp extends Component {
     default:
       message = '';
       break;
-    case 1:
-      message = `No users found with that code.`;
-      break;
-    case 2:
-      message = `That pin code and stuff is wrong`;
-      break;
-    case 3:
-      message = `Authorization is required to initiate trade with this dealer`;
-      break;
-    case 4:
-      message = `Invalid PIN format`;
-      break;
     }
 
     return message;

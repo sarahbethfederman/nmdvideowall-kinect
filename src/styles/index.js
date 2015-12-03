@@ -1,7 +1,15 @@
 import * as Common from './common.js';
 
-const sharedStyles = Object.assign({},
+// Collapsed styles (no namespaces)
+// e.g. Common.Whatever -> SharedStyles.Whatever
+const collapsedStyles = Object.assign({},
   Common
 );
 
-export default sharedStyles;
+// Namespaced styles
+// e.g. Common.Whatever -> SharedStyles.Common.Whatever
+// const sharedStyles = {
+//   Common
+// };
+
+export default collapsedStyles;
