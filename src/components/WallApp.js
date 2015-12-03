@@ -11,6 +11,8 @@ import PlayerControls from './PlayerControls';
 import MainPlayer from './MainPlayer';
 import ActivityWatcher from './ActivityWatcher';
 
+import SharedStyles from '../styles';
+
 import * as entriesActionCreators from '../actions/EntriesAction.js';
 
 @connect((state) => {
@@ -123,6 +125,8 @@ class WallApp extends Component {
         overflow: hidden;
         margin: 0;
         padding: 0;
+
+        ${ SharedStyles.noTextSelect }
       }
     `);
   }

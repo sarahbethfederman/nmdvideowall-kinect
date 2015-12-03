@@ -40,6 +40,7 @@ export default class ImageComponent extends Component {
         min-height: 100%;
         min-width: 100%;
         position: absolute;
+        pointer-events: none;
         top: 50%;
         transform: translateX(-50%) translateY(-50%);
       }
