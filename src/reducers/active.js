@@ -5,7 +5,7 @@ import * as ActionTypes from '../constants/ActionTypes.js';
 // is just a boolean. if we want to include other data
 // (such as last time the user acted, etc) we could turn
 // this into an object and go from there. ezpz
-const initialState = true;
+const initialState = false;
 
 export function active(state = initialState, action = {}) {
   const { type, data } = action;

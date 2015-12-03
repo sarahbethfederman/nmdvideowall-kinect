@@ -18,7 +18,37 @@ class PrimaryNavigation extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      displayedOffset: 0,
+      storedOffset: 0,
+      dragOffset: 0,
+      winWidth: window.innerWidth
+    };
+
+    window.addEventListener('mousedown', (e)=>{
+      this.setState({
+        dragging: true,
+        storedOffset: this.state.displayedOffset,
+        dragOffset: e.pageX
+      });
+    });
+
+    window.addEventListener('mouseup', ()=>{
+      this.setState({
+        dragging: false,
+        storedOffset: this.state.displayedOffset,
+        dragOffset: 0
+      });
+    });
+
+    window.addEventListener('mousemove', (e)=>{
+      if (this.state.dragging === true) {
+        this.setState({
+          displayedOffset: this.state.storedOffset - (this.state.dragOffset - e.pageX),
+          winWidth: window.innerWidth
+        });
+      }
+    });
   }
 
   render() {
@@ -26,8 +56,8 @@ class PrimaryNavigation extends Component {
 
     return (
       <InlineCss stylesheet={ this.css() } namespace="PrimaryNavigation">
-        <div className="primary-navigation" style={{display: this.props.active ? `block` : `none`}}>
-          <ul key={ entries.size }>
+        <div className={ this.props.active ? `primary-navigation` : `primary-navigation hidden` }>
+          <ul key={ entries.size } style={{ transform: `translateX(${ this.state.displayedOffset - (this.state.winWidth / 2) }px)` }} >
             {
               entries.map((entry, idx)=>{
                 return (
@@ -37,6 +67,25 @@ class PrimaryNavigation extends Component {
                 );
               })
             }
+            {
+              entries.map((entry, idx)=>{
+                return (
+                  <li className="nav-item" key={ idx } title={ entry.location }>
+                  { selected !== idx ? (<Link to={ `/${ idx + 1 }` }>{ entry.title }</Link>) : (<span>{ entry.title }</span>) }
+                  </li>
+                );
+              })
+            }
+            {
+              entries.map((entry, idx)=>{
+                return (
+                  <li className="nav-item" key={ idx } title={ entry.location }>
+                  { selected !== idx ? (<Link to={ `/${ idx + 1 }` }>{ entry.title }</Link>) : (<span>{ entry.title }</span>) }
+                  </li>
+                );
+              })
+            }
+
           </ul>
         </div>
 
@@ -50,16 +99,30 @@ class PrimaryNavigation extends Component {
     return (`
       & > .primary-navigation {
         position: fixed;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+
         top: 50%;
         transform: translateY(-50%);
         left: 5%;
         right: 5%;
         z-index: 50;
+
+        white-space: nowrap;
+
+        transition: 0.3s opacity ease;
+        opacity: 1;
+      }
+
+      & > .primary-navigation.hidden {
+        opacity: 0;
       }
 
       & > .primary-navigation > ul .nav-item {
         display: inline-block;
         width: ${ 100 / (this.props.entries.size || this.props.entries.length || 1) }%;
+        min-width: 200px;
         height: 10vh;
         box-shadow: inset 0px 0px 2px;
       }

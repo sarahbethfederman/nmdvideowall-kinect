@@ -92,7 +92,7 @@ class WallApp extends Component {
     return (
       <InlineCss stylesheet={ this.css() } namespace="WallApp">
         <div>
-          <ActivityWatcher />
+          <ActivityWatcher delay={ 1000 } />
           <MainPlayer entries={ entries } entry={ entries[entryID - 1] } />
           <PrimaryNavigation entries={ entries } selected={ entryID - 1 } />
           <PlayerControls

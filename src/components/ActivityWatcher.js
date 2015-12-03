@@ -39,7 +39,7 @@ class ActivityWatcher extends Component {
       clearTimeout(this.activityTimer);
     }
 
-    this.activityTimer = setTimeout(() => this.userIsNotActive(), 5000);
+    this.activityTimer = setTimeout(() => this.userIsNotActive(), (this.props.hasOwnProperty(`delay`) ? this.props.delay : 500));
   }
 
   userIsActive() {
