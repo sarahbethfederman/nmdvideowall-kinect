@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import fetch from 'fetch';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { pushState } from 'redux-router';
@@ -25,30 +24,22 @@ class PrimaryNavigation extends Component {
       winWidth: window.innerWidth
     };
 
-    window.addEventListener('mousedown', (e)=>{
-      this.setState({
-        dragging: true,
-        storedOffset: this.state.displayedOffset,
-        dragOffset: e.pageX
-      });
-    });
 
-    window.addEventListener('mouseup', ()=>{
-      this.setState({
-        dragging: false,
-        storedOffset: this.state.displayedOffset,
-        dragOffset: 0
-      });
-    });
+    this.downHandler = this.onMouseDown.bind(this);
+    this.upHandler = this.onMouseUp.bind(this);
+    this.moveHandler = this.onMouseMove.bind(this);
+  }
 
-    window.addEventListener('mousemove', (e)=>{
-      if (this.state.dragging === true) {
-        this.setState({
-          displayedOffset: this.state.storedOffset - (this.state.dragOffset - e.pageX),
-          winWidth: window.innerWidth
-        });
-      }
-    });
+  componentDidMount() {
+    window.addEventListener('mousedown', this.downHandler);
+    window.addEventListener('mouseup', this.upHandler);
+    window.addEventListener('mousemove', this.moveHandler);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('mousedown', this.downHandler);
+    window.removeEventListener('mouseup', this.upHandler);
+    window.removeEventListener('mousemove', this.moveHandler);
   }
 
   render() {
@@ -67,25 +58,6 @@ class PrimaryNavigation extends Component {
                 );
               })
             }
-            {
-              entries.map((entry, idx)=>{
-                return (
-                  <li className="nav-item" key={ idx } title={ entry.location }>
-                  { selected !== idx ? (<Link to={ `/${ idx + 1 }` }>{ entry.title }</Link>) : (<span>{ entry.title }</span>) }
-                  </li>
-                );
-              })
-            }
-            {
-              entries.map((entry, idx)=>{
-                return (
-                  <li className="nav-item" key={ idx } title={ entry.location }>
-                  { selected !== idx ? (<Link to={ `/${ idx + 1 }` }>{ entry.title }</Link>) : (<span>{ entry.title }</span>) }
-                  </li>
-                );
-              })
-            }
-
           </ul>
         </div>
 
@@ -140,6 +112,33 @@ class PrimaryNavigation extends Component {
 
     return message;
   }
+
+
+  onMouseDown(e) {
+    this.setState({
+      dragging: true,
+      storedOffset: this.state.displayedOffset,
+      dragOffset: e.pageX
+    });
+  }
+
+  onMouseUp() {
+    this.setState({
+      dragging: false,
+      storedOffset: this.state.displayedOffset,
+      dragOffset: 0
+    });
+  }
+
+  onMouseMove(e) {
+    if (this.state.dragging === true) {
+      this.setState({
+        displayedOffset: this.state.storedOffset - (this.state.dragOffset - e.pageX),
+        winWidth: window.innerWidth
+      });
+    }
+  }
+
 }
 
 

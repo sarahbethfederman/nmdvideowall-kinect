@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import fetch from 'fetch';
 // import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { pushState } from 'redux-router';
@@ -8,18 +7,19 @@ import InlineCss from 'react-inline-css';
 
 import PrimaryNavigation from './PrimaryNavigation';
 import PlayerControls from './PlayerControls';
-import MainPlayer from './MainPlayer';
+import Entry from './Entry';
 import ActivityWatcher from './ActivityWatcher';
 
 import SharedStyles from '../styles';
 
-import * as entriesActionCreators from '../actions/EntriesAction.js';
+import * as entriesActions from '../actions/EntriesAction.js';
 
 @connect((state) => {
   return {
-    router: state.router
+    router: state.router,
+    entries: state.entries
   };
-}, entriesActionCreators)
+}, entriesActions)
 class WallApp extends Component {
   constructor(props) {
     super(props);
@@ -28,13 +28,8 @@ class WallApp extends Component {
       isLoading: false
     };
 
-    // setTimeout(()=>{
-    //   this.setState({
-    //     isLoading: false
-    //   });
-    // }, 1000);
-
-    // this.getInitialData();
+    console.log(this.props);
+    this.props.loadEntries();
   }
 
   render() {
@@ -77,14 +72,15 @@ class WallApp extends Component {
 
   renderDisplay() {
     const { entries } = this.props;
-    const entryID = this.props.router.params.entryID || 1;
+    const entryID = parseInt(this.props.router.params.entryID || 1, 10);
+    const selectedEntry = entries[entryID - 1] || {};
 
     return (
       <InlineCss stylesheet={ this.css() } namespace="WallApp">
         <div>
           <ActivityWatcher delay={ 1000 } />
-          <MainPlayer entries={ entries } entry={ entries[entryID - 1] } />
-          <PrimaryNavigation entries={ entries } selected={ entryID - 1 } />
+          <Entry key={ selectedEntry.id } ref="entry" { ...selectedEntry } />
+          <PrimaryNavigation key={ entries.length } entries={ entries } selected={ entryID - 1 } />
           <PlayerControls
             current={ entryID }
             max={ entries.length || entries.size || 0 }

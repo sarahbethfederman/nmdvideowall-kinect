@@ -18,7 +18,6 @@ export default class MainPlayer extends Component {
 
     return (
       <InlineCss stylesheet={ this.css() } namespace="MainPlayer">
-        <Entry key={ entry.id } ref="entry" { ...entry } />
       </InlineCss>
     );
   }

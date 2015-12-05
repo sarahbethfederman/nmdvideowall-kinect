@@ -8,7 +8,7 @@ import * as ActionTypes from '../constants/ActionTypes.js';
 const initialState = false;
 
 export function active(state = initialState, action = {}) {
-  const { type, data } = action;
+  const { type, payload } = action;
   let newState = state;
 
   switch (type) {
@@ -19,7 +19,7 @@ export function active(state = initialState, action = {}) {
   // we want to update the 'active' state.
   case ActionTypes.ACTIVITY:
   case ActionTypes.IDLE:
-    newState = data.active;
+    newState = payload.active;
     break;
   }
 

@@ -8,8 +8,7 @@ import * as entriesActionCreators from '../actions/EntriesAction.js';
 
 @connect((state) => {
   return {
-    entries: state.entries,
-    router: state.router
+    entries: state.entries
   };
 }, entriesActionCreators)
 export default class IndexPage extends Component {
@@ -21,18 +20,13 @@ export default class IndexPage extends Component {
   render() {
     return (
       <InlineCss stylesheet={ this.css() } namespace="Home">
-        <WallApp entries={ this.props.entries } />
+        <WallApp />
       </InlineCss>
     );
   }
 
   css() {
     return (`
-      & div {
-        font-size: 14px;
-        color: #333;
-        text-decoration: underline;
-      }
     `);
   }
 }
