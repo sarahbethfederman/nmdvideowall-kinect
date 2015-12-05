@@ -79,7 +79,7 @@ class WallApp extends Component {
       <InlineCss stylesheet={ this.css() } namespace="WallApp">
         <div>
           <ActivityWatcher delay={ 1000 } />
-          <Entry key={ selectedEntry.id } ref="entry" { ...selectedEntry } />
+          <Entry ref="entry" { ...selectedEntry } />
           <PrimaryNavigation key={ entries.length } entries={ entries } selected={ entryID - 1 } />
           <PlayerControls
             current={ entryID }

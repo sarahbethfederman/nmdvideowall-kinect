@@ -16,7 +16,7 @@ export default class VideoControls extends Component {
   }
 
   render() {
-    const { playing, muted, ccEnabled } = this.state;
+    const { playing, muted } = this.state;
     const { hasCC } = this.props;
 
     return (

@@ -36,7 +36,13 @@ class Entry extends Component {
     return (
       <InlineCss stylesheet={ this.css() } namespace="Entry">
         <div className="entry-display">
-          <VideoComponent key={ sources[0] } poster={ poster || '' } sources={ sources } tracks={ tracks } onLoad={ ::this.onEntryLoad } onComplete={ ::this.onEntryComplete } />
+          <VideoComponent
+            key={ sources[0] }
+            poster={ poster || '' }
+            sources={ sources }
+            tracks={ tracks }
+            onLoad={ ::this.onEntryLoad }
+            onComplete={ ::this.onEntryComplete } />
         </div>
 
         <br /><br />

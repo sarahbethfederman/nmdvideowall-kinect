@@ -25,6 +25,8 @@ class PrimaryNavigation extends Component {
     };
 
 
+    // holding onto the binding references so we can add/remove them
+    // when the component (dis)mounts
     this.downHandler = this.onMouseDown.bind(this);
     this.upHandler = this.onMouseUp.bind(this);
     this.moveHandler = this.onMouseMove.bind(this);
