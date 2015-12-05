@@ -1,34 +1,34 @@
 import * as Actions from '../constants/ActionTypes';
 import fetch from 'isomorphic-fetch';
 
-function requestPosts(reddit) {
+import { AppConfig } from '../config.js';
+
+function requestEntries() {
   return {
     type: Actions.LOAD_START,
     payload: {
-      reddit
+      entries: []
     }
   };
 }
 
-function receivePosts(reddit, json) {
+function receiveEntries(json) {
   return {
     type: Actions.LOAD_RECEIVE,
     payload: {
-      reddit,
-      entries: json.data.children.map(child => child.data),
-      receivedAt: Date.now()
+      entries: json.entries
     }
   };
 }
 
-export function loadEntries(reddit = 'javascript') {
+export function loadEntries() {
   return (dispatch)=>{
-    dispatch(requestPosts(reddit));
+    dispatch(requestEntries());
 
-    return fetch(`http://www.reddit.com/r/${reddit}.json`)
+    return fetch(AppConfig.API)
       .then(response => response.json())
       .then(json => {
-        dispatch(receivePosts(reddit, json));
+        dispatch(receiveEntries(json));
       }
     );
   };
