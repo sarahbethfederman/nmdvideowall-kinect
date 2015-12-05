@@ -10,6 +10,7 @@ import * as entriesActionCreators from '../actions/EntriesAction.js';
 @connect((state) => {
   return {
     active: state.active,
+    entries: state.entries,
     router: state.router
   };
 }, entriesActionCreators)
@@ -24,7 +25,6 @@ class PrimaryNavigation extends Component {
       winWidth: window.innerWidth
     };
 
-
     // holding onto the binding references so we can add/remove them
     // when the component (dis)mounts
     this.downHandler = this.onMouseDown.bind(this);
@@ -36,6 +36,15 @@ class PrimaryNavigation extends Component {
     window.addEventListener('mousedown', this.downHandler);
     window.addEventListener('mouseup', this.upHandler);
     window.addEventListener('mousemove', this.moveHandler);
+  }
+
+  componentWillReceiveProps() {
+    if (this.refs['item-list'].childNodes.length) {
+      this.setState({
+        storedOffset: this.refs['item-list'].childNodes[parseInt(this.props.router.params.entryID || 1, 10) - 1].offsetLeft,
+        displayedOffset: this.refs['item-list'].childNodes[parseInt(this.props.router.params.entryID || 1, 10) - 1].offsetLeft
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -50,7 +59,7 @@ class PrimaryNavigation extends Component {
     return (
       <InlineCss stylesheet={ this.css() } namespace="PrimaryNavigation">
         <div className={ this.props.active ? `primary-navigation` : `primary-navigation hidden` }>
-          <ul key={ entries.size } style={{ transform: `translateX(${ this.state.displayedOffset - (this.state.winWidth / 2) }px)` }} >
+          <ul key={ entries.size || entries.length } style={{ transform: `translateX(calc(50% - ${ this.state.displayedOffset }px))` }} ref="item-list">
             {
               entries.map((entry, idx)=>{
                 return (
@@ -93,14 +102,22 @@ class PrimaryNavigation extends Component {
         opacity: 0;
       }
 
+      & > .primary-navigation > ul {
+        transition: 0.2s all ease -0.1s;
+      }
+
       & > .primary-navigation > ul .nav-item {
         display: inline-block;
-        width: ${ 100 / (this.props.entries.size || this.props.entries.length || 1) }%;
+        width: ${ this.getBlockSize() }%;
         min-width: 200px;
         height: 10vh;
         box-shadow: inset 0px 0px 2px;
       }
     `);
+  }
+
+  getBlockSize() {
+    return (100 / (this.props.entries.size || this.props.entries.length || 1));
   }
 
   generateErrorMessage() {
@@ -135,7 +152,7 @@ class PrimaryNavigation extends Component {
   onMouseMove(e) {
     if (this.state.dragging === true) {
       this.setState({
-        displayedOffset: this.state.storedOffset - (this.state.dragOffset - e.pageX),
+        displayedOffset: this.state.storedOffset + (this.state.dragOffset - e.pageX),
         winWidth: window.innerWidth
       });
     }

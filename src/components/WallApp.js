@@ -80,7 +80,7 @@ class WallApp extends Component {
         <div>
           <ActivityWatcher delay={ 1000 } />
           <Entry ref="entry" { ...selectedEntry } />
-          <PrimaryNavigation key={ entries.length } entries={ entries } selected={ entryID - 1 } />
+          <PrimaryNavigation selected={ entryID - 1 } />
           <PlayerControls
             current={ entryID }
             max={ entries.length || entries.size || 0 }
