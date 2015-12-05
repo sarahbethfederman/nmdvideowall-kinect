@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import fetch from 'fetch';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { pushState } from 'redux-router';
@@ -10,6 +9,8 @@ import * as entriesActionCreators from '../actions/EntriesAction.js';
 
 @connect((state) => {
   return {
+    active: state.active,
+    entries: state.entries,
     router: state.router
   };
 }, entriesActionCreators)
@@ -17,7 +18,39 @@ class PrimaryNavigation extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      displayedOffset: 0,
+      storedOffset: 0,
+      dragOffset: 0,
+      winWidth: window.innerWidth
+    };
+
+    // holding onto the binding references so we can add/remove them
+    // when the component (dis)mounts
+    this.downHandler = this.onMouseDown.bind(this);
+    this.upHandler = this.onMouseUp.bind(this);
+    this.moveHandler = this.onMouseMove.bind(this);
+  }
+
+  componentDidMount() {
+    window.addEventListener('mousedown', this.downHandler);
+    window.addEventListener('mouseup', this.upHandler);
+    window.addEventListener('mousemove', this.moveHandler);
+  }
+
+  componentWillReceiveProps() {
+    if (this.refs['item-list'].childNodes.length) {
+      this.setState({
+        storedOffset: this.refs['item-list'].childNodes[parseInt(this.props.router.params.entryID || 1, 10) - 1].offsetLeft,
+        displayedOffset: this.refs['item-list'].childNodes[parseInt(this.props.router.params.entryID || 1, 10) - 1].offsetLeft
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('mousedown', this.downHandler);
+    window.removeEventListener('mouseup', this.upHandler);
+    window.removeEventListener('mousemove', this.moveHandler);
   }
 
   render() {
@@ -25,8 +58,8 @@ class PrimaryNavigation extends Component {
 
     return (
       <InlineCss stylesheet={ this.css() } namespace="PrimaryNavigation">
-        <div className="primary-navigation">
-          <ul key={ entries.size }>
+        <div className={ this.props.active ? `primary-navigation` : `primary-navigation hidden` }>
+          <ul key={ entries.size || entries.length } style={{ transform: `translateX(calc(50% - ${ this.state.displayedOffset }px))` }} ref="item-list">
             {
               entries.map((entry, idx)=>{
                 return (
@@ -49,20 +82,42 @@ class PrimaryNavigation extends Component {
     return (`
       & > .primary-navigation {
         position: fixed;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+
         top: 50%;
         transform: translateY(-50%);
         left: 5%;
         right: 5%;
         z-index: 50;
+
+        white-space: nowrap;
+
+        transition: 0.3s opacity ease;
+        opacity: 1;
+      }
+
+      & > .primary-navigation.hidden {
+        opacity: 0;
+      }
+
+      & > .primary-navigation > ul {
+        transition: 0.2s all ease -0.1s;
       }
 
       & > .primary-navigation > ul .nav-item {
         display: inline-block;
-        width: ${ 100 / (this.props.entries.size || this.props.entries.length || 1) }%;
+        width: ${ this.getBlockSize() }%;
+        min-width: 200px;
         height: 10vh;
         box-shadow: inset 0px 0px 2px;
       }
     `);
+  }
+
+  getBlockSize() {
+    return (100 / (this.props.entries.size || this.props.entries.length || 1));
   }
 
   generateErrorMessage() {
@@ -76,6 +131,33 @@ class PrimaryNavigation extends Component {
 
     return message;
   }
+
+
+  onMouseDown(e) {
+    this.setState({
+      dragging: true,
+      storedOffset: this.state.displayedOffset,
+      dragOffset: e.pageX
+    });
+  }
+
+  onMouseUp() {
+    this.setState({
+      dragging: false,
+      storedOffset: this.state.displayedOffset,
+      dragOffset: 0
+    });
+  }
+
+  onMouseMove(e) {
+    if (this.state.dragging === true) {
+      this.setState({
+        displayedOffset: this.state.storedOffset + (this.state.dragOffset - e.pageX),
+        winWidth: window.innerWidth
+      });
+    }
+  }
+
 }
 
 

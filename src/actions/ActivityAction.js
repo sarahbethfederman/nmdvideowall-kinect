@@ -12,31 +12,31 @@ export function setActive(yesno) {
     type: Actions.ACTIVITY,
     // anything else in here is grabbed by the handler in the reducer
     // (i'm just dumping it in an object)
-    data: {
+    payload: {
       active: yesno
     }
   };
 }
 
-export function wasActive() {
+export function confirmUserWasActive() {
   return {
     // 'type' is what tells the reducer which way to affect the state
     type: Actions.ACTIVITY,
     // anything else in here is grabbed by the handler in the reducer
     // (i'm just dumping it in an object)
-    data: {
+    payload: {
       active: true
     }
   };
 }
 
-export function wasIdle() {
+export function confirmUserWasIdle() {
   return {
     // 'type' is what tells the reducer which way to affect the state
     type: Actions.IDLE,
     // anything else in here is grabbed by the handler in the reducer
     // (i'm just dumping it in an object)
-    data: {
+    payload: {
       active: false
     }
   };

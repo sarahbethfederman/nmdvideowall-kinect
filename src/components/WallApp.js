@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import fetch from 'fetch';
 // import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { pushState } from 'redux-router';
@@ -8,16 +7,19 @@ import InlineCss from 'react-inline-css';
 
 import PrimaryNavigation from './PrimaryNavigation';
 import PlayerControls from './PlayerControls';
-import MainPlayer from './MainPlayer';
+import Entry from './Entry';
 import ActivityWatcher from './ActivityWatcher';
 
-import * as entriesActionCreators from '../actions/EntriesAction.js';
+import SharedStyles from '../styles';
+
+import * as entriesActions from '../actions/EntriesAction.js';
 
 @connect((state) => {
   return {
-    router: state.router
+    router: state.router,
+    entries: state.entries
   };
-}, entriesActionCreators)
+}, entriesActions)
 class WallApp extends Component {
   constructor(props) {
     super(props);
@@ -26,13 +28,8 @@ class WallApp extends Component {
       isLoading: false
     };
 
-    // setTimeout(()=>{
-    //   this.setState({
-    //     isLoading: false
-    //   });
-    // }, 1000);
-
-    // this.getInitialData();
+    console.log(this.props);
+    this.props.loadEntries();
   }
 
   render() {
@@ -45,18 +42,6 @@ class WallApp extends Component {
     switch (this.state.errorCode) {
     default:
       message = '';
-      break;
-    case 1:
-      message = `No users found with that code.`;
-      break;
-    case 2:
-      message = `That pin code and stuff is wrong`;
-      break;
-    case 3:
-      message = `Authorization is required to initiate trade with this dealer`;
-      break;
-    case 4:
-      message = `Invalid PIN format`;
       break;
     }
 
@@ -87,14 +72,15 @@ class WallApp extends Component {
 
   renderDisplay() {
     const { entries } = this.props;
-    const entryID = this.props.router.params.entryID || 1;
+    const entryID = parseInt(this.props.router.params.entryID || 1, 10);
+    const selectedEntry = entries[entryID - 1] || {};
 
     return (
       <InlineCss stylesheet={ this.css() } namespace="WallApp">
         <div>
-          <ActivityWatcher />
-          <MainPlayer entries={ entries } entry={ entries[entryID - 1] } />
-          <PrimaryNavigation entries={ entries } selected={ entryID - 1 } />
+          <ActivityWatcher delay={ 1000 } />
+          <Entry ref="entry" { ...selectedEntry } />
+          <PrimaryNavigation selected={ entryID - 1 } />
           <PlayerControls
             current={ entryID }
             max={ entries.length || entries.size || 0 }
@@ -123,6 +109,8 @@ class WallApp extends Component {
         overflow: hidden;
         margin: 0;
         padding: 0;
+
+        ${ SharedStyles.noTextSelect }
       }
     `);
   }

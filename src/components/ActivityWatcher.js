@@ -15,43 +15,41 @@ class ActivityWatcher extends Component {
   constructor(props) {
     super(props);
 
-    console.log('asdf', this.props);
+    // this is kinda weird
+    this.activityHandler = this.userDidSomething.bind(this);
+  }
+
+  componentDidMount() {
+    window.addEventListener('mousemove', this.activityHandler);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('mousemove', this.activityHandler);
   }
 
   render() {
     return null;
   }
 
-  bindWindow() {
+  userDidSomething() {
+    if (this.props.active === false) {
+      this.userIsActive();
+    }
+    if (this.activityTimer) {
+      clearTimeout(this.activityTimer);
+    }
 
+    this.activityTimer = setTimeout(() => this.userIsNotActive(), (this.props.hasOwnProperty(`delay`) ? this.props.delay : 500));
   }
 
-  rafShim() {
-    (()=>{
-      var lastTime = 0;
-      var vendors = ['ms', 'moz', 'webkit', 'o'];
-      for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-          window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-          window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame']
-                                     || window[vendors[x]+'CancelRequestAnimationFrame'];
-      }
-
-      if (!window.requestAnimationFrame)
-          window.requestAnimationFrame = function(callback, element) {
-              var currTime = new Date().getTime();
-              var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-              var id = window.setTimeout(function() { callback(currTime + timeToCall); },
-                timeToCall);
-              lastTime = currTime + timeToCall;
-              return id;
-          };
-
-      if (!window.cancelAnimationFrame)
-          window.cancelAnimationFrame = function(id) {
-              clearTimeout(id);
-          };
-    }());
+  userIsActive() {
+    this.props.confirmUserWasActive();
   }
+
+  userIsNotActive() {
+    this.props.confirmUserWasIdle();
+  }
+
 }
 
 

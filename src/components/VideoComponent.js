@@ -35,8 +35,6 @@ export default class VideoComponent extends Component {
 
         <video
           ref="video"
-          onload={ ::this.onLoad }
-          oncomplete={ ::this.onComplete }
           preload="auto"
           autoPlay="autoplay"
           poster={ poster }>
@@ -125,17 +123,17 @@ export default class VideoComponent extends Component {
   setVideoListeners() {
     const vid = this.refs.video;
 
-    vid.addEventListener('timeupdate', ()=>{
-      this.onTick();
-    });
+    vid.addEventListener('canplaythrough', ()=>this.onLoad());
+    vid.addEventListener('timeupdate', ()=>this.onTick());
+    vid.addEventListener('ended', ()=>this.onComplete());
   }
 
   removeVideoListeners() {
     const vid = this.refs.video;
 
     vid.removeEventListener('timeupdate');
-    vid.removeEventListener('load');
-    vid.removeEventListener('complete');
+    vid.removeEventListener('canplaythrough');
+    vid.removeEventListener('ended');
   }
 
   onTick() {

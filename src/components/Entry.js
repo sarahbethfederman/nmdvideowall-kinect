@@ -1,10 +1,20 @@
 import React, { Component } from 'react';
+
+import { connect } from 'react-redux';
+import { pushState } from 'redux-router';
 // import { Link } from 'react-router';
 import InlineCss from 'react-inline-css';
 import VideoComponent from './VideoComponent';
 import ImageComponent from './ImageComponent';
 
-export default class Entry extends Component {
+import * as entriesActionCreators from '../actions/EntriesAction.js';
+
+@connect((state) => {
+  return {
+    router: state.router
+  };
+}, entriesActionCreators)
+class Entry extends Component {
   constructor(props) {
     super(props);
 
@@ -26,7 +36,13 @@ export default class Entry extends Component {
     return (
       <InlineCss stylesheet={ this.css() } namespace="Entry">
         <div className="entry-display">
-          <VideoComponent key={ sources[0] } poster={ poster || '' } sources={ sources } tracks={ tracks } onLoad={ ::this.onEntryLoad } />
+          <VideoComponent
+            key={ sources[0] }
+            poster={ poster || '' }
+            sources={ sources }
+            tracks={ tracks }
+            onLoad={ ::this.onEntryLoad }
+            onComplete={ ::this.onEntryComplete } />
         </div>
 
         <br /><br />
@@ -83,9 +99,26 @@ export default class Entry extends Component {
       isLoading: false
     });
   }
+
+  onEntryComplete() {
+    // this WILL break
+    // we need to dispatch a new entry select event
+    this.props.pushState(null, `/${ (parseInt(this.props.router.params.entryID || 1, 10) + 1) }`);
+  }
 }
 
 
 Entry.defaultProps = {
   format: 'image'
 };
+
+
+function selector(state) {
+  return state;
+}
+export default connect(
+  selector,
+
+  // Use an action creator for navigation
+  { pushState }
+)(Entry);

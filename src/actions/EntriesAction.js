@@ -1,27 +1,35 @@
 import * as Actions from '../constants/ActionTypes';
+import fetch from 'isomorphic-fetch';
 
-export function setFilter(filter) {
+import { AppConfig } from '../config.js';
+
+function requestEntries() {
   return {
-    type: Actions.SET_FILTER,
-    payload: filter
+    type: Actions.LOAD_START,
+    payload: {
+      entries: []
+    }
   };
 }
 
-
-export function loadStuff() {
+function receiveEntries(json) {
   return {
-    type: 'fart',
-    promise: new Promise((resolve) => {
-      fetch(`//fake.api/whatever`)
-      .then((response)=>{
-        if (response.status >= 400) {
-          throw new Error('Bad response from server');
-        }
-        return response;
-      })
-      .then((response)=>{
-        resolve(response);
-      });
-    })
+    type: Actions.LOAD_RECEIVE,
+    payload: {
+      entries: json.entries
+    }
+  };
+}
+
+export function loadEntries() {
+  return (dispatch)=>{
+    dispatch(requestEntries());
+
+    return fetch(AppConfig.API)
+      .then(response => response.json())
+      .then(json => {
+        dispatch(receiveEntries(json));
+      }
+    );
   };
 }
