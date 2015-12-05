@@ -24,7 +24,6 @@ export default class VideoControls extends Component {
         <div className="video-controls">
           <button onClick={ ::this.onPlayToggle }>{ playing ? `Pause` : `Play` }</button>
           <button onClick={ ::this.onMuteToggle }>{ muted ? `Unmute` : `Mute` }</button>
-          <button onClick={ ::this.onCCToggle }>{ ccEnabled ? `CC Off` : `CC On` }</button>
           <input ref="volume" onChange={ ::this.onVolumeChange } type="range" min="0" max="1" step="0.1" defaultValue="1" />
           {
             ()=>{
