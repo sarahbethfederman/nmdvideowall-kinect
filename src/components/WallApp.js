@@ -9,6 +9,7 @@ import PrimaryNavigation from './PrimaryNavigation';
 import PlayerControls from './PlayerControls';
 import Entry from './Entry';
 import ActivityWatcher from './ActivityWatcher';
+import KinectWatcher from './KinectWatcher';
 
 import SharedStyles from '../styles';
 
@@ -78,6 +79,7 @@ class WallApp extends Component {
     return (
       <InlineCss stylesheet={ this.css() } namespace="WallApp">
         <div>
+          <KinectWatcher />
           <ActivityWatcher delay={ 1000 } />
           <Entry ref="entry" { ...selectedEntry } />
           <PrimaryNavigation selected={ entryID - 1 } />
